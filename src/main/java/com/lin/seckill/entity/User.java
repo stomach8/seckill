@@ -1,5 +1,6 @@
 package com.lin.seckill.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -20,6 +21,9 @@ import java.time.LocalDateTime;
 public class User {
 
     private static final long serialVersionUID = 1L;
+
+    @TableId("id")
+    private Long id;
 
     private String nickname;
 
