@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -23,10 +23,13 @@ public class SeckillGoods {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId("id")
+    private Long id;
+
     /**
      * 商品ID
      */
-    @TableId("id")
+
     private Long goodsId;
 
     /**
@@ -42,12 +45,12 @@ public class SeckillGoods {
     /**
      * 秒杀开始时间
      */
-    private LocalDateTime startDate;
+    private Date startDate;
 
     /**
      * 秒杀结束时间
      */
-    private LocalDateTime endDate;
+    private Date endDate;
 
 
 }

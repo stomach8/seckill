@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -21,10 +21,13 @@ public class Order {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId("id")
+    private Long id;
+
     /**
      * 用户ID
      */
-    @TableId("id")
+
     private Long userId;
 
     /**
@@ -65,12 +68,12 @@ public class Order {
     /**
      * 订单创建时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
 
     /**
      * 支付时间
      */
-    private LocalDateTime payDate;
+    private Date payDate;
 
 
 }

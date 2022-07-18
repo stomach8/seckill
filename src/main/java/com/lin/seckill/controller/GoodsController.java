@@ -51,6 +51,8 @@ public class GoodsController {
         model.addAttribute("user", user);
         GoodsVO goodsVO = goodsService.findGoodsVOByGoodsId(goodsId);
         //正常的话这部分应该前端处理，后端只返回状态即可
+        //返回状态的话可能在秒杀结束的瞬间，之后用户还是可以进行秒杀，
+        //因此更好的做法是返回开始结束时间
         Date startDate = goodsVO.getStartDate();
         Date endDate = goodsVO.getEndDate();
         Date nowDate = new Date();

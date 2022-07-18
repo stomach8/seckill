@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -43,12 +43,12 @@ public class User implements Serializable {
     /**
      * 注册时间
      */
-    private LocalDateTime registerDate;
+    private Date registerDate;
 
     /**
      * 最后一次登录时间
      */
-    private LocalDateTime lastLoginDate;
+    private Date lastLoginDate;
 
     /**
      * 登录次数

@@ -20,10 +20,12 @@ public class SeckillOrder {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId("id")
+    private Long id;
+
     /**
      * 用户ID
      */
-    @TableId("id")
     private Long userId;
 
     /**
