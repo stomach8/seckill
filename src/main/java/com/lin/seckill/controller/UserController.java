@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author star
  * @since 2022-07-12
  */
 @RestController
-@RequestMapping("/t/user")
+@RequestMapping("/user")
 public class UserController {
 
 }

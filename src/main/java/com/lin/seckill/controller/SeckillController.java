@@ -33,6 +33,15 @@ public class SeckillController {
     @Autowired
     private IOrderService orderService;
 
+    /**
+     * win10 qps: 1501
+     * linux qps:
+     *
+     * @param model
+     * @param user
+     * @param goodsId
+     * @return
+     */
     @RequestMapping("/doSeckill")
     public String doSeckill(Model model, User user, Long goodsId) {
         if (user == null) {

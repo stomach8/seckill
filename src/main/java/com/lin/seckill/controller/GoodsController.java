@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -30,9 +31,11 @@ public class GoodsController {
 
     /**
      * 跳转商品页
+     * win10 qps: 1957.8
+     * linux qps: 1585
      */
     @RequestMapping("/toList")
-    public String toList(Model model, User user) {
+    public String toList(Model model, User user) throws IOException {
 //        if (StringUtils.isEmpty(ticket)) {
 //            return "login";
 //        }
