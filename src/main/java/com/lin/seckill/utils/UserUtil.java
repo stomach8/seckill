@@ -21,7 +21,7 @@ import java.util.List;
  * @date : 2022/7/21 0:04
  */
 
-public class UserUtilTest {
+public class UserUtil {
 
     @Autowired
     private UserMapper userMapper;
@@ -41,11 +41,11 @@ public class UserUtilTest {
             users.add(user);
         }
         //向数据库插入数据
-        for (int i = 0; i < users.size(); i++) {
-            User user = users.get(i);
-            System.out.println(user);
-            userMapper.insert(user);
-        }
+//        for (int i = 0; i < users.size(); i++) {
+//            User user = users.get(i);
+//            System.out.println(user);
+//            userMapper.insert(user);
+//        }
         //登录，生成userTicket
         String urlString = "http://localhost:8080/login/doLogin";
         File file = new File("C:\\Users\\Lin\\Desktop\\config.txt");
@@ -92,7 +92,7 @@ public class UserUtilTest {
     }
 
     public static void main(String[] args) throws IOException {
-        UserUtilTest userUtilTest = new UserUtilTest();
+        UserUtil userUtilTest = new UserUtil();
         userUtilTest.createUser(5000);
     }
 

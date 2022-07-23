@@ -1,6 +1,5 @@
 package com.lin.seckill.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.seckill.entity.Order;
 import com.lin.seckill.entity.SeckillOrder;
 import com.lin.seckill.entity.User;
@@ -10,6 +9,7 @@ import com.lin.seckill.service.ISeckillOrderService;
 import com.lin.seckill.vo.GoodsVO;
 import com.lin.seckill.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +33,9 @@ public class SeckillController {
     @Autowired
     private IOrderService orderService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * win10 qps: 1501
      * linux qps:
@@ -55,7 +58,8 @@ public class SeckillController {
             return "secKillFail";
         }
         //判断是否重复抢购
-        SeckillOrder seckillOrder = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
+//        SeckillOrder seckillOrder = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
+        SeckillOrder seckillOrder = (SeckillOrder) redisTemplate.opsForValue().get("order:" + user.getId() + ":" + goodsId);
         if (seckillOrder != null) {
             model.addAttribute("errmsg", RespBeanEnum.REPEATE_ERROR);
             return "secKillFail";
