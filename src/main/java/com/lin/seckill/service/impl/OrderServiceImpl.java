@@ -45,11 +45,19 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Autowired
     private RedisTemplate redisTemplate;
 
+    /**
+     * <p>秒杀订单</p>
+     * <p style="text-decoration:line-through">这里如果 if 不加括号就会出现并发问题</p>
+     *
+     * @param user  用户
+     * @param goods 商品
+     * @return 订单
+     */
     @Transactional
     @Override
     public Order seckill(User user, GoodsVO goods) {
         //秒杀减库存
-        SeckillGoods seckillGoods = seckillGoodsService.getOne(new QueryWrapper<SeckillGoods>().eq("goods_id", goods.getId()));
+
         /**
          * 这里 - 1 再执行update的话，是可能出现这样的情况，
          * 两个请求都到同时到 - 1，操作，这样这两个请求就相当于一个 - 1 操作失效
@@ -57,12 +65,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 //        seckillGoods.setStockCount(seckillGoods.getStockCount() - 1);
 //        seckillGoodsService.updateById(seckillGoods);
         boolean result = seckillGoodsService.update(new UpdateWrapper<SeckillGoods>().setSql("stock_count = stock_count - 1").eq("goods_id", goods.getId()).gt("stock_count", 0));
+
         /**
          * 这里如果 if 不加括号就会出现并发问题
+         * 说明：将getOne语句移到下面也可以解决
          */
-        if (!result) {
+        if (!result)
             return null;
-        }
+
+
+        SeckillGoods seckillGoods = seckillGoodsService.getOne(new QueryWrapper<SeckillGoods>().eq("goods_id", goods.getId()));
 //        //总库存减一
 //        goodsService.update(new UpdateWrapper<Goods>().eq("id", goods.getId()).set("goods_stock", goods.getGoodsStock() - 1));
         //生成订单
