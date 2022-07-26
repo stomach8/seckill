@@ -3,7 +3,9 @@ package com.lin.seckill.controller;
 import com.lin.seckill.entity.User;
 import com.lin.seckill.service.IGoodsService;
 import com.lin.seckill.service.IUserService;
+import com.lin.seckill.vo.DetailVo;
 import com.lin.seckill.vo.GoodsVO;
+import com.lin.seckill.vo.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -48,7 +50,7 @@ public class GoodsController {
      * win10 qps: 1957.8
      * linux qps: 1585
      */
-    @RequestMapping(value = "/toList", produces = "text/html;charset=utf-8 ")
+    @RequestMapping(value = "/toList", produces = "text/html;charset=utf-8")
     @ResponseBody
     public String toList(Model model, User user, HttpServletRequest request, HttpServletResponse response) {
 //        if (StringUtils.isEmpty(ticket)) {
@@ -118,5 +120,33 @@ public class GoodsController {
         }
         return html;
 //        return "goodsDetail";
+    }
+
+    @RequestMapping("/detail/{goodsId}")
+    @ResponseBody
+    public RespBean toDetail(User user, @PathVariable Long goodsId) {
+        GoodsVO goodsVo = goodsService.findGoodsVOByGoodsId(goodsId);
+        Date startDate = goodsVo.getStartDate();
+        Date endDate = goodsVo.getEndDate();
+        Date nowDate = new Date();
+        int secKillStatus = 0;
+        //秒杀倒计时
+        int remainSeconds = 0;
+        if (nowDate.before(startDate)) {
+            secKillStatus = 0;
+            remainSeconds = (int) ((startDate.getTime() - nowDate.getTime()) / 1000);
+        } else if (nowDate.after(endDate)) {
+            secKillStatus = 2;
+            remainSeconds = -1;
+        } else {
+            secKillStatus = 1;
+            remainSeconds = 0;
+        }
+        DetailVo detailVo = new DetailVo();
+        detailVo.setUser(user);
+        detailVo.setGoodsVo(goodsVo);
+        detailVo.setRemainSeconds(remainSeconds);
+        detailVo.setSecKillStatus(secKillStatus);
+        return RespBean.success(detailVo);
     }
 }

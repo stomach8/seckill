@@ -8,12 +8,15 @@ import com.lin.seckill.entity.SeckillGoods;
 import com.lin.seckill.entity.SeckillOrder;
 import com.lin.seckill.entity.User;
 import com.lin.seckill.mapper.OrderMapper;
+import com.lin.seckill.service.IGoodsService;
 import com.lin.seckill.service.IOrderService;
 import com.lin.seckill.service.ISeckillGoodsService;
 import com.lin.seckill.service.ISeckillOrderService;
 import com.lin.seckill.vo.GoodsVO;
+import com.lin.seckill.vo.OrderDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +36,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Autowired
     private ISeckillGoodsService seckillGoodsService;
 
-//    @Autowired
-//    private IGoodsService goodsService;
+    @Autowired
+    private IGoodsService goodsService;
 
     @Autowired
     private OrderMapper orderMapper;
@@ -56,6 +59,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Transactional
     @Override
     public Order seckill(User user, GoodsVO goods) {
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+
         //秒杀减库存
 
         /**
@@ -70,8 +75,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
          * 这里如果 if 不加括号就会出现并发问题
          * 说明：将getOne语句移到下面也可以解决
          */
-        if (!result)
+        if (!result) {
+            valueOperations.set("isStockEmpty:" + goods.getId(), "0");
             return null;
+        }
 
 
         SeckillGoods seckillGoods = seckillGoodsService.getOne(new QueryWrapper<SeckillGoods>().eq("goods_id", goods.getId()));
@@ -97,5 +104,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         seckillOrderService.save(seckillOrder);
         redisTemplate.opsForValue().set("order:" + user.getId() + ":" + goods.getId(), seckillGoods);
         return order;
+    }
+
+    @Override
+    public OrderDetailVO detail(Long orderId) {
+        Order order = baseMapper.selectById(orderId);
+        Long goodsId = order.getGoodsId();
+        GoodsVO goodsVo = goodsService.findGoodsVOByGoodsId(goodsId);
+        OrderDetailVO res = new OrderDetailVO();
+        res.setOrder(order);
+        res.setGoodsVo(goodsVo);
+        return res;
     }
 }

@@ -2,10 +2,11 @@ package com.lin.seckill.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.seckill.entity.SeckillOrder;
+import com.lin.seckill.entity.User;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author star
@@ -13,4 +14,5 @@ import com.lin.seckill.entity.SeckillOrder;
  */
 public interface ISeckillOrderService extends IService<SeckillOrder> {
 
+    Long getResult(User user, Long goodsId);
 }

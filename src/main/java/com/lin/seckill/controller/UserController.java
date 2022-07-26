@@ -32,54 +32,54 @@ public class UserController {
         return RespBean.success(user);
     }
 
-    /**
-     * 测试 mq 消息发送
-     */
-    @GetMapping("/mq")
-    @ResponseBody
-    public void mq() {
-        mqSender.send("hello");
-    }
-
-    /**
-     * fanout 发送消息
-     */
-    @GetMapping("/mq/fanout")
-    @ResponseBody
-    public void fanoutMQ() {
-        mqSender.fanoutSend("hello,fanout!");
-    }
-
-    /**
-     * direct 发送消息
-     */
-    @GetMapping("/mq/direct01")
-    @ResponseBody
-    public void directMQ01() {
-        mqSender.directSend01("hello,direct01!");
-    }
-
-    @GetMapping("/mq/direct02")
-    @ResponseBody
-    public void directMQ02() {
-        mqSender.directSend02("hello,direct02!");
-    }
-
-    @GetMapping("/mq/direct03")
-    @ResponseBody
-    public void directMQ03() {
-        mqSender.directSend03("hello,direct03!");
-    }
-
-    @GetMapping("/mq/topic01")
-    @ResponseBody
-    public void topicMQ01() {
-        mqSender.topicSend01("hello,topic01!");
-    }
-
-    @GetMapping("/mq/topic02")
-    @ResponseBody
-    public void topicMQ02() {
-        mqSender.topicSend02("hello,topic02!");
-    }
+//    /**
+//     * 测试 mq 消息发送
+//     */
+//    @GetMapping("/mq")
+//    @ResponseBody
+//    public void mq() {
+//        mqSender.send("hello");
+//    }
+//
+//    /**
+//     * fanout 发送消息
+//     */
+//    @GetMapping("/mq/fanout")
+//    @ResponseBody
+//    public void fanoutMQ() {
+//        mqSender.fanoutSend("hello,fanout!");
+//    }
+//
+//    /**
+//     * direct 发送消息
+//     */
+//    @GetMapping("/mq/direct01")
+//    @ResponseBody
+//    public void directMQ01() {
+//        mqSender.directSend01("hello,direct01!");
+//    }
+//
+//    @GetMapping("/mq/direct02")
+//    @ResponseBody
+//    public void directMQ02() {
+//        mqSender.directSend02("hello,direct02!");
+//    }
+//
+//    @GetMapping("/mq/direct03")
+//    @ResponseBody
+//    public void directMQ03() {
+//        mqSender.directSend03("hello,direct03!");
+//    }
+//
+//    @GetMapping("/mq/topic01")
+//    @ResponseBody
+//    public void topicMQ01() {
+//        mqSender.topicSend01("hello,topic01!");
+//    }
+//
+//    @GetMapping("/mq/topic02")
+//    @ResponseBody
+//    public void topicMQ02() {
+//        mqSender.topicSend02("hello,topic02!");
+//    }
 }
