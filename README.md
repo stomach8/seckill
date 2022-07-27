@@ -1,2 +1,0 @@
-# seckill
-seckill peoject
