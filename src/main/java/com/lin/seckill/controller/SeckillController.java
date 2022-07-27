@@ -15,6 +15,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,9 @@ public class SeckillController implements InitializingBean {
 
     private Map<Long, Boolean> emptyStockMap = new HashMap<>();
 
+    @Autowired
+    private RedisScript<Long> redisScript;
+
     /**
      * win10 qps: 1501
      * linux qps:
@@ -63,6 +68,7 @@ public class SeckillController implements InitializingBean {
      * @return
      */
     @RequestMapping("/doSeckill")
+    @ResponseBody
     public RespBean doSeckill(Model model, User user, Long goodsId) {
         if (user == null) {
             return RespBean.error(RespBeanEnum.SESSION_ERROR);
@@ -79,7 +85,11 @@ public class SeckillController implements InitializingBean {
         }
 
         //redis预减库存
-        Long stock = valueOperations.decrement("seckillGoods:" + goodsId);
+//        Long stock = valueOperations.decrement("seckillGoods:" + goodsId);
+
+        //lua脚本 redis预减库存
+        Long stock = (Long) redisTemplate.execute(redisScript, Collections.singletonList("seckillGoods:" + goodsId));
+
         if (stock == 0) {
             emptyStockMap.put(goodsId, true);
             valueOperations.increment("seckillGoods:" + goodsId);

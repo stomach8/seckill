@@ -2,8 +2,10 @@ package com.lin.seckill.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -29,5 +31,13 @@ public class RedisConfig {
         //注入连接工厂
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
+    }
+
+    @Bean
+    public DefaultRedisScript<Long> script() {
+        DefaultRedisScript<Long> defaultRedisScript = new DefaultRedisScript<>();
+        defaultRedisScript.setLocation(new ClassPathResource("stock.lua"));
+        defaultRedisScript.setResultType(Long.class);
+        return defaultRedisScript;
     }
 }
